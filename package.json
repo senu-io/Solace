@@ -1,0 +1,28 @@
+{
+  "name": "solace-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Next-generation Discord music system and dual dashboard",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:bot": "npm --workspace=apps/bot run dev",
+    "build:bot": "npm --workspace=apps/bot run build",
+    "start:bot": "npm --workspace=apps/bot run start",
+    "deploy:commands": "npm --workspace=apps/bot run deploy:commands"
+  },
+  "keywords": [
+    "discord-bot",
+    "music",
+    "lavalink",
+    "spotify",
+    "youtube-music",
+    "soundcloud"
+  ],
+  "author": "senu-io",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
