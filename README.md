@@ -51,21 +51,9 @@ Solace supports both self-hosted deployment via Docker Compose and multi-tenant 
 
 Solace isolates audio decoding and network streaming to Lavalink v4, keeping the Discord gateway client lightweight and responsive.
 
-```
-                         [ Discord Gateway / API ]
-                                     |
-                         Events & Slash Commands
-                                     v
-[ Streaming Providers ] <----> [ Solace Bot Client ] <----> [ Web Dashboards ]
-(Spotify, YTM, SoundCloud)           |                         (Next.js)
-             |                       | IPC / Redis
-             v                       v
-       [ Lavalink v4 ] <-------------+
-             |
-        Opus Stream
-             v
-  [ Discord Voice Channel ]
-```
+<p align="center">
+  <img src="assets/architecture.png" alt="Solace System Architecture" width="100%" />
+</p>
 
 ---
 
