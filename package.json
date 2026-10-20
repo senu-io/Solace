@@ -8,6 +8,9 @@
     "packages/*"
   ],
   "scripts": {
+    "build": "npm --workspace=packages/shared run build && npm --workspace=packages/database run build && npm --workspace=apps/bot run build",
+    "db:generate": "npx --workspace=@solace/database prisma generate",
+    "db:push": "npx --workspace=@solace/database prisma db push",
     "dev:bot": "npm --workspace=apps/bot run dev",
     "build:bot": "npm --workspace=apps/bot run build",
     "start:bot": "npm --workspace=apps/bot run start",

@@ -3,6 +3,7 @@ import {
   GuildMember,
   SlashCommandBuilder,
 } from "discord.js";
+import { db } from "@solace/database";
 import type { Command, CommandContext } from "../../structures/Command.js";
 import { SolaceEmbed } from "../../utils/embeds.js";
 import { formatDuration } from "../../utils/formatters.js";
@@ -41,12 +42,13 @@ export const playCommand: Command = {
     // Get or create player
     let player = client.lavalink.getPlayer(interaction.guildId!);
     if (!player) {
+      const guildConfig = await db.getGuildConfig(interaction.guildId!);
       player = client.lavalink.createPlayer({
         guildId: interaction.guildId!,
         voiceChannelId: voiceChannel.id,
-        textChannelId: interaction.channelId,
+        textChannelId: guildConfig.textChannelId || interaction.channelId,
         selfDeaf: true,
-        volume: 80,
+        volume: guildConfig.defaultVolume,
       });
     }
 

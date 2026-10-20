@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model GuildConfig {
+  guildId         String   @id
+  prefix          String   @default("!")
+  defaultVolume   Int      @default(80)
+  djRoleId        String?
+  twentyFourSeven Boolean  @default(false)
+  voiceChannelId  String?
+  textChannelId   String?
+  voteSkip        Boolean  @default(true)
+  voteSkipRatio   Float    @default(0.5)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model User {
+  id        String     @id // Discord User ID
+  tier      UserTier   @default(FREE)
+  playlists Playlist[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+enum UserTier {
+  FREE
+  PREMIUM
+  STAFF
+  OWNER
+}
+
+model Playlist {
+  id        String          @id @default(uuid())
+  userId    String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  isPublic  Boolean         @default(false)
+  tracks    PlaylistTrack[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@unique([userId, name])
+}
+
+model PlaylistTrack {
+  id         String   @id @default(uuid())
+  playlistId String
+  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  title      String
+  author     String
+  uri        String
+  duration   Int
+  artworkUrl String?
+  position   Int
+  addedAt    DateTime @default(now())
+}
+
+model CommandLog {
+  id          String   @id @default(uuid())
+  guildId     String?
+  userId      String
+  commandName String
+  executedAt  DateTime @default(now())
+}

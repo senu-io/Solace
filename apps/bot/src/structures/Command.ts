@@ -4,6 +4,7 @@ import type {
   SlashCommandOptionsOnlyBuilder,
   SlashCommandSubcommandsOnlyBuilder,
 } from "discord.js";
+import type { PermissionLevel } from "@solace/shared";
 import type { SolaceClient } from "../client/SolaceClient.js";
 
 export type SlashCommandData =
@@ -22,7 +23,6 @@ export interface Command {
   category: "music" | "filters" | "settings" | "utility" | "admin";
   voiceChannelRequired?: boolean;
   sameVoiceChannelRequired?: boolean;
-  djOnly?: boolean;
-  ownerOnly?: boolean;
+  requiredPermission?: PermissionLevel;
   run: (context: CommandContext) => Promise<unknown>;
 }

@@ -11,6 +11,7 @@ import {
   type Track,
 } from "lavalink-client";
 import { blue, green, red, yellow } from "colorette";
+import { db } from "@solace/database";
 import { config } from "../config.js";
 import type { Command } from "../structures/Command.js";
 import { SolaceEmbed } from "../utils/embeds.js";
@@ -92,8 +93,33 @@ export class SolaceClient extends Client {
 
   private registerLavalinkEvents(): void {
     // Node connection events
-    this.lavalink.nodeManager.on("connect", (node) => {
+    this.lavalink.nodeManager.on("connect", async (node) => {
       console.log(green(`[Lavalink] Node "${node.id}" connected successfully.`));
+
+      // Restore 24/7 channels across servers
+      for (const guild of this.guilds.cache.values()) {
+        try {
+          const guildConfig = await db.getGuildConfig(guild.id);
+          if (guildConfig.twentyFourSeven && guildConfig.voiceChannelId) {
+            let player = this.lavalink.getPlayer(guild.id);
+            if (!player) {
+              player = this.lavalink.createPlayer({
+                guildId: guild.id,
+                voiceChannelId: guildConfig.voiceChannelId,
+                textChannelId: guildConfig.textChannelId || undefined,
+                selfDeaf: true,
+                volume: guildConfig.defaultVolume,
+              });
+            }
+            if (!player.connected) {
+              await player.connect();
+              console.log(blue(`[24/7] Connected to persistent voice channel in guild: ${guild.name}`));
+            }
+          }
+        } catch (err) {
+          console.warn(`[24/7] Failed to restore connection for guild ${guild.id}:`, err);
+        }
+      }
     });
 
     this.lavalink.nodeManager.on("disconnect", (node, reason) => {

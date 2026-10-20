@@ -5,6 +5,7 @@ import { loopCommand } from "./music/loop.js";
 import { nowplayingCommand } from "./music/nowplaying.js";
 import { pauseCommand } from "./music/pause.js";
 import { playCommand } from "./music/play.js";
+import { playlistCommand } from "./music/playlist.js";
 import { previousCommand } from "./music/previous.js";
 import { queueCommand } from "./music/queue.js";
 import { radioCommand } from "./music/radio.js";
@@ -15,6 +16,7 @@ import { shuffleCommand } from "./music/shuffle.js";
 import { skipCommand } from "./music/skip.js";
 import { stopCommand } from "./music/stop.js";
 import { volumeCommand } from "./music/volume.js";
+import { settingsCommand } from "./settings/settings.js";
 import { pingCommand } from "./utility/ping.js";
 
 export const commands: Command[] = [
@@ -34,5 +36,7 @@ export const commands: Command[] = [
   clearCommand,
   removeCommand,
   radioCommand,
+  playlistCommand,
+  settingsCommand,
   pingCommand,
 ];

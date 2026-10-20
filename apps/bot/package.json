@@ -11,6 +11,8 @@
     "deploy:commands": "tsx src/deploy.ts"
   },
   "dependencies": {
+    "@solace/database": "*",
+    "@solace/shared": "*",
     "colorette": "^2.0.20",
     "discord.js": "^14.18.0",
     "dotenv": "^16.4.7",

@@ -1,7 +1,10 @@
-import type { ButtonInteraction, Interaction } from "discord.js";
+import type { ButtonInteraction, GuildMember, Interaction } from "discord.js";
+import { PermissionLevel } from "@solace/shared";
+import { db } from "@solace/database";
 import type { SolaceClient } from "../client/SolaceClient.js";
 import { SolaceEmbed } from "../utils/embeds.js";
 import { createPlayerButtons } from "../utils/components.js";
+import { checkPermission, formatPermissionLevelName } from "../utils/permissions.js";
 
 export async function handleInteraction(
   client: SolaceClient,
@@ -12,9 +15,34 @@ export async function handleInteraction(
     const command = client.commands.get(interaction.commandName);
     if (!command) return;
 
-    if (command.voiceChannelRequired) {
-      const member = interaction.guild?.members.cache.get(interaction.user.id);
-      if (!member?.voice.channelId) {
+    const member = interaction.member as GuildMember | null;
+
+    // Check bound text channel restriction
+    if (interaction.guildId && member) {
+      const guildConfig = await db.getGuildConfig(interaction.guildId);
+      if (
+        guildConfig.textChannelId &&
+        guildConfig.textChannelId !== interaction.channelId
+      ) {
+        const { currentLevel } = await checkPermission(member, PermissionLevel.SERVER_ADMIN);
+        if (currentLevel < PermissionLevel.SERVER_ADMIN) {
+          await interaction.reply({
+            embeds: [
+              SolaceEmbed.error(
+                "Channel Locked",
+                `Music commands are restricted to <#${guildConfig.textChannelId}> in this server.`
+              ),
+            ],
+            ephemeral: true,
+          });
+          return;
+        }
+      }
+    }
+
+    // Voice channel precondition checks
+    if (command.voiceChannelRequired && member) {
+      if (!member.voice.channelId) {
         await interaction.reply({
           embeds: [
             SolaceEmbed.error(
@@ -27,6 +55,36 @@ export async function handleInteraction(
         return;
       }
     }
+
+    // Role-based permission checks (RBAC)
+    if (command.requiredPermission && member) {
+      const { allowed, currentLevel } = await checkPermission(
+        member,
+        command.requiredPermission
+      );
+      if (!allowed) {
+        await interaction.reply({
+          embeds: [
+            SolaceEmbed.error(
+              "Access Denied",
+              `This command requires **${formatPermissionLevelName(
+                command.requiredPermission
+              )}** permissions.\n` +
+                `Your current level: **${formatPermissionLevelName(currentLevel)}**.`
+            ),
+          ],
+          ephemeral: true,
+        });
+        return;
+      }
+    }
+
+    // Log command for dashboard metrics
+    db.logCommand(
+      interaction.guildId,
+      interaction.user.id,
+      interaction.commandName
+    ).catch(() => null);
 
     try {
       await command.run({ client, interaction });
