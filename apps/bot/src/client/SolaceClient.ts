@@ -15,6 +15,7 @@ import { config } from "../config.js";
 import type { Command } from "../structures/Command.js";
 import { SolaceEmbed } from "../utils/embeds.js";
 import { formatDuration } from "../utils/formatters.js";
+import { createPlayerButtons } from "../utils/components.js";
 
 export class SolaceClient extends Client {
   public commands: Collection<string, Command> = new Collection();
@@ -128,7 +129,12 @@ export class SolaceClient extends Client {
         embed.setThumbnail(track.info.artworkUrl);
       }
 
-      channel.send({ embeds: [embed] }).catch(() => null);
+      channel
+        .send({
+          embeds: [embed],
+          components: createPlayerButtons(player),
+        })
+        .catch(() => null);
     });
 
     this.lavalink.on("queueEnd", (player: Player) => {
