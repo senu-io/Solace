@@ -9,6 +9,8 @@
   ],
   "scripts": {
     "build": "npm --workspace=packages/shared run build && npm --workspace=packages/database run build && npm --workspace=apps/bot run build && npm --workspace=apps/web run build",
+    "test": "tsx --test packages/*/tests/*.ts apps/*/tests/*.ts",
+    "check:slop": "node .agents/skills/oxfords/scripts/check.mjs apps/web/src",
     "db:generate": "npx --workspace=@solace/database prisma generate",
     "db:push": "npx --workspace=@solace/database prisma db push",
     "dev:bot": "npm --workspace=apps/bot run dev",

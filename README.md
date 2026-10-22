@@ -1,7 +1,6 @@
 <div align="center">
-  <img src="assets/solace_discord_banner_680x240.png" alt="Solace Banner" width="680" />
-  <br />
-  <br />
+  <img src="assets/logo.png" alt="Solace Logo" width="120" height="120" />
+  <h1>Solace</h1>
   <p>Multi-source Discord music system with dedicated management dashboards.</p>
 
   <p>
@@ -158,4 +157,13 @@ The containerized stack boots Lavalink v4, PostgreSQL, the Discord bot client, a
 
    # Run Web Dashboard
    npm run dev:web
+   ```
+
+5. Run automated tests:
+   ```bash
+   # Execute unit and integration tests
+   npm test
+
+   # Validate Oxfords UI/UX compliance
+   npm run check:slop
    ```
