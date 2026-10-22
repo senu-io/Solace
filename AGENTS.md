@@ -9,3 +9,11 @@ When building, modifying, or reviewing any user interface in this project, follo
    ```bash
    node .agents/skills/oxfords/scripts/check.mjs apps/web/src
    ```
+
+# Modular Filesystem Organization Rules
+
+Never store tools or projects directly in root `D:\`. Adhere to the global folder structure:
+- Developer Tools & Software: `D:\Other\Developer Tools`
+- Shared GFX & UI/UX Icons: `D:\Other\GFX`
+- Miscellaneous Shared Resources & Fonts: `D:\Other\Resources`
+- Projects & Repositories: `D:\Other\Projects`
