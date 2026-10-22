@@ -1,0 +1,59 @@
+# Multi-stage Dockerfile for Solace Web Dashboard
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+RUN apk add --no-cache libc6-compat
+
+# Copy root monorepo package manifests
+COPY package*.json tsconfig.base.json ./
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/database/package.json ./packages/database/
+COPY apps/web/package.json ./apps/web/
+
+# Install dependencies across all workspace packages
+RUN npm ci
+
+# Copy package source directories
+COPY packages/shared ./packages/shared
+COPY packages/database ./packages/database
+COPY apps/web ./apps/web
+
+# Generate Prisma database client and build packages
+RUN npx --workspace=@solace/database prisma generate
+RUN npm --workspace=packages/shared run build
+RUN npm --workspace=packages/database run build
+
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+
+# Build Next.js in standalone mode
+RUN npm --workspace=apps/web run build
+
+# Runner stage
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+RUN apk add --no-cache libc6-compat dumb-init
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# Run as non-privileged user for security
+RUN addgroup --system --gid 1001 solace && \
+    adduser --system --uid 1001 solace
+
+# Copy standalone output and static assets
+COPY --from=builder --chown=solace:solace /app/apps/web/.next/standalone ./
+COPY --from=builder --chown=solace:solace /app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=builder --chown=solace:solace /app/apps/web/public ./apps/web/public
+
+USER solace
+
+EXPOSE 3000
+
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["node", "apps/web/server.js"]

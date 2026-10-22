@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Disc3, Server, Shield, Sparkles, ExternalLink } from "lucide-react";
 
 export function Navbar() {
+  const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID || "1562745565140492298";
+
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-surface/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -48,7 +50,7 @@ export function Navbar() {
         {/* Action Buttons */}
         <div className="flex items-center gap-3">
           <a
-            href="https://discord.com/api/oauth2/authorize?client_id=1234567890&permissions=8&scope=bot%20applications.commands"
+            href={`https://discord.com/api/oauth2/authorize?client_id=${clientId}&permissions=8&scope=bot%20applications.commands`}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:flex items-center gap-2 rounded-xl bg-surface border border-border px-4 py-2 text-sm font-semibold text-zinc-300 hover:bg-surfaceHover hover:text-white transition"

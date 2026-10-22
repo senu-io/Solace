@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Server, Settings, Plus, ExternalLink, ShieldCheck } from "lucide-react";
 
 export default function DashboardIndexPage() {
+  const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID || "1562745565140492298";
+
   // Mock guild list (in production populated by Discord OAuth /guilds session)
   const userGuilds = [
     {
@@ -38,7 +40,7 @@ export default function DashboardIndexPage() {
         </div>
 
         <a
-          href="https://discord.com/api/oauth2/authorize?client_id=1234567890&permissions=8&scope=bot%20applications.commands"
+          href={`https://discord.com/api/oauth2/authorize?client_id=${clientId}&permissions=8&scope=bot%20applications.commands`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 rounded-xl bg-surface hover:bg-surfaceHover border border-border px-4 py-2 text-sm font-semibold text-zinc-300 hover:text-white transition"
@@ -101,7 +103,7 @@ export default function DashboardIndexPage() {
                   </Link>
                 ) : (
                   <a
-                    href={`https://discord.com/api/oauth2/authorize?client_id=1234567890&permissions=8&scope=bot%20applications.commands&guild_id=${guild.id}`}
+                    href={`https://discord.com/api/oauth2/authorize?client_id=${clientId}&permissions=8&scope=bot%20applications.commands&guild_id=${guild.id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex w-full items-center justify-center gap-2 rounded-xl bg-surfaceHover hover:bg-surface border border-border py-2.5 text-sm font-semibold text-zinc-300 hover:text-white transition"

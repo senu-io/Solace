@@ -1,6 +1,7 @@
 <div align="center">
-  <img src="assets/logo.png" alt="Solace Logo" width="120" height="120" />
-  <h1>Solace</h1>
+  <img src="assets/solace_discord_banner_680x240.png" alt="Solace Banner" width="680" />
+  <br />
+  <br />
   <p>Multi-source Discord music system with dedicated management dashboards.</p>
 
   <p>
@@ -8,8 +9,9 @@
     <a href="#features">Features</a> &bull;
     <a href="#architecture">Architecture</a> &bull;
     <a href="#permissions">Permissions</a> &bull;
-    <a href="#getting-started">Getting Started</a> &bull;
-    <a href="#project-structure">Project Structure</a>
+    <a href="#project-structure">Project Structure</a> &bull;
+    <a href="#deployment">Deployment</a> &bull;
+    <a href="#development">Development</a>
   </p>
 </div>
 
@@ -85,21 +87,17 @@ Solace/
 │   └── shared/         # Common types, enums, and constants
 ├── lavalink/           # Lavalink server configuration
 ├── assets/             # Branding and icons
-├── docker-compose.yml  # Deployment configuration
+├── Dockerfile.bot      # Bot container specification
+├── Dockerfile.web      # Web dashboard container specification
+├── docker-compose.yml  # Production container orchestration
 └── .env.example        # Environment variable definitions
 ```
 
 ---
 
-## Getting Started
+## Deployment
 
-### Prerequisites
-- Node.js 20.0.0 or higher
-- Java 17 or higher (for Lavalink v4)
-- Discord Application credentials (Bot Token, Client ID)
-- Spotify API credentials (Client ID, Client Secret)
-
-### Installation
+### Docker Compose (Recommended)
 
 1. Clone the repository:
    ```bash
@@ -112,18 +110,52 @@ Solace/
    cp .env.example .env
    ```
 
-3. Install dependencies:
+3. Deploy slash commands to Discord:
+   ```bash
+   npm install
+   npm run deploy:commands
+   ```
+
+4. Launch the stack:
+   ```bash
+   docker compose up -d
+   ```
+
+The containerized stack boots Lavalink v4, PostgreSQL, the Discord bot client, and the Next.js web dashboard on port 3000.
+
+---
+
+## Development
+
+### Prerequisites
+- Node.js 20.0.0 or higher
+- Java 17 or higher (for local Lavalink execution)
+- Discord Application credentials (Bot Token, Client ID)
+- Spotify API credentials (Client ID, Client Secret)
+
+### Manual Setup
+
+1. Install dependencies:
    ```bash
    npm install
    ```
 
-4. Start the Lavalink node:
+2. Register slash commands:
+   ```bash
+   npm run deploy:commands
+   ```
+
+3. Start the Lavalink node:
    ```bash
    cd lavalink
    java -jar Lavalink.jar
    ```
 
-5. Start the bot:
+4. Start development processes:
    ```bash
+   # Run Discord bot
    npm run dev:bot
+
+   # Run Web Dashboard
+   npm run dev:web
    ```

@@ -1,0 +1,90 @@
+name: solace
+
+services:
+  lavalink:
+    image: ghcr.io/lavalink-devs/lavalink:4
+    container_name: solace-lavalink
+    restart: unless-stopped
+    ports:
+      - "2333:2333"
+    environment:
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
+      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
+    volumes:
+      - ./lavalink/application.yml:/opt/Lavalink/application.yml:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:2333/version || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: solace-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-solace}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-solace_secret}
+      POSTGRES_DB: ${POSTGRES_DB:-solace}
+    volumes:
+      - solace_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-solace}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.bot
+    container_name: solace-bot
+    restart: unless-stopped
+    depends_on:
+      lavalink:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=production
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
+      - BOT_OWNER_IDS=${BOT_OWNER_IDS}
+      - BOT_ADMIN_IDS=${BOT_ADMIN_IDS}
+      - DEFAULT_VOLUME=${DEFAULT_VOLUME:-80}
+      - LAVALINK_HOST=lavalink
+      - LAVALINK_PORT=2333
+      - LAVALINK_PASSWORD=${LAVALINK_PASSWORD:-youshallnotpass}
+      - LAVALINK_SECURE=false
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-solace}:${POSTGRES_PASSWORD:-solace_secret}@postgres:5432/${POSTGRES_DB:-solace}?schema=public
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
+      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: solace-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-solace}:${POSTGRES_PASSWORD:-solace_secret}@postgres:5432/${POSTGRES_DB:-solace}?schema=public
+      - NEXT_PUBLIC_DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-solace_production_nextauth_secret_key_32chars}
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+
+volumes:
+  solace_pgdata:
+    name: solace_pgdata

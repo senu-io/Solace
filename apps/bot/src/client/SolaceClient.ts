@@ -55,7 +55,7 @@ export class SolaceClient extends Client {
         if (guild) guild.shard.send(payload);
       },
       client: {
-        id: config.clientId || "1234567890",
+        id: config.clientId || "1562745565140492298",
         username: "Solace",
       },
       autoSkip: true,

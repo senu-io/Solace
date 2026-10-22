@@ -1,0 +1,56 @@
+# Multi-stage Dockerfile for Solace Discord Bot Client
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Install build dependencies including libc6-compat for Prisma on Alpine
+RUN apk add --no-cache libc6-compat
+
+# Copy root monorepo package manifests
+COPY package*.json tsconfig.base.json ./
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/database/package.json ./packages/database/
+COPY apps/bot/package.json ./apps/bot/
+
+# Install dependencies across all workspace packages
+RUN npm ci
+
+# Copy package source directories
+COPY packages/shared ./packages/shared
+COPY packages/database ./packages/database
+COPY apps/bot ./apps/bot
+
+# Generate Prisma database client and build TypeScript outputs
+RUN npx --workspace=@solace/database prisma generate
+RUN npm --workspace=packages/shared run build
+RUN npm --workspace=packages/database run build
+RUN npm --workspace=apps/bot run build
+
+# Runner stage
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+RUN apk add --no-cache libc6-compat dumb-init
+
+ENV NODE_ENV=production
+
+# Run as non-privileged user for security
+RUN addgroup --system --gid 1001 solace && \
+    adduser --system --uid 1001 solace
+
+# Copy dependencies and compiled outputs
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
+COPY --from=builder /app/packages/shared/package.json ./packages/shared/package.json
+COPY --from=builder /app/packages/database/dist ./packages/database/dist
+COPY --from=builder /app/packages/database/package.json ./packages/database/package.json
+COPY --from=builder /app/packages/database/prisma ./packages/database/prisma
+COPY --from=builder /app/apps/bot/dist ./apps/bot/dist
+COPY --from=builder /app/apps/bot/package.json ./apps/bot/package.json
+
+USER solace
+
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["node", "apps/bot/dist/index.js"]
