@@ -3,7 +3,7 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Solace | Next-Gen Discord Music System",
+  title: "Solace | Modular Discord Music System",
   description:
     "High-fidelity Discord music playback from Spotify, YouTube Music, and SoundCloud with dual management dashboards.",
 };
@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className="min-h-screen bg-background antialiased flex flex-col justify-between">
+      <body className="min-h-dvh bg-background antialiased flex flex-col justify-between">
         <header>
           <Navbar />
         </header>

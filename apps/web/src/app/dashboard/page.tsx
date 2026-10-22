@@ -62,7 +62,7 @@ export default function DashboardIndexPage() {
               className="rounded-2xl border border-border bg-surface p-6 flex flex-col justify-between hover:border-brand-500/40 transition group"
             >
               <div className="flex items-start gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-surfaceHover border border-border text-lg font-bold text-brand-300 group-hover:scale-105 transition">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-surfaceHover border border-border text-lg font-bold text-brand-300">
                   {initials}
                 </div>
 

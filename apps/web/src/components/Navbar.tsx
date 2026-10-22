@@ -7,14 +7,14 @@ export function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/20 border border-brand-500/40 text-brand-400 group-hover:scale-105 transition">
-            <Disc3 className="h-6 w-6 animate-[spin_10s_linear_infinite]" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/20 border border-brand-500/40 text-brand-400">
+            <Disc3 className="h-6 w-6" />
           </div>
           <div className="flex flex-col">
             <span className="text-xl font-bold tracking-tight text-white group-hover:text-brand-300 transition">
               Solace
             </span>
-            <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-400">
+            <span className="text-xs text-zinc-400">
               Music Engine
             </span>
           </div>

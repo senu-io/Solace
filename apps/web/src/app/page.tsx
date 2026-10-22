@@ -26,7 +26,7 @@ export default function Home() {
 
           <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
             High-fidelity Discord audio,{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-indigo-300 to-purple-400">
+            <span className="text-brand-400">
               pure and uncompromised.
             </span>
           </h1>
@@ -40,7 +40,7 @@ export default function Home() {
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
             <Link
               href="/dashboard"
-              className="flex items-center gap-2 rounded-xl bg-brand-500 hover:bg-brand-600 px-6 py-3.5 text-base font-semibold text-white shadow-xl shadow-brand-500/30 transition hover:-translate-y-0.5"
+              className="flex items-center gap-2 rounded-xl bg-brand-500 hover:bg-brand-600 px-6 py-3.5 text-base font-semibold text-white shadow-xl shadow-brand-500/30 transition"
             >
               <Server className="h-5 w-5" />
               Server Owner Portal
@@ -48,7 +48,7 @@ export default function Home() {
 
             <Link
               href="/admin"
-              className="flex items-center gap-2 rounded-xl bg-surface hover:bg-surfaceHover border border-border px-6 py-3.5 text-base font-semibold text-zinc-300 hover:text-white transition hover:-translate-y-0.5"
+              className="flex items-center gap-2 rounded-xl bg-surface hover:bg-surfaceHover border border-border px-6 py-3.5 text-base font-semibold text-zinc-300 hover:text-white transition"
             >
               <Shield className="h-5 w-5 text-amber-400" />
               Super Admin Console

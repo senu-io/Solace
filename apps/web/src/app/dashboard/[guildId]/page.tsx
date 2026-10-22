@@ -125,7 +125,7 @@ export default function GuildDashboardPage({
           {savedSuccess ? (
             <>
               <Check className="h-4 w-4 text-emerald-300" />
-              <span>Saved!</span>
+              <span>Saved</span>
             </>
           ) : (
             <>
@@ -150,7 +150,7 @@ export default function GuildDashboardPage({
                   Active Playback
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-white">Chilled Cow — Lofi Hip Hop Beats</h3>
+              <h3 className="text-lg font-bold text-white">Chilled Cow: Lofi Hip Hop Beats</h3>
               <p className="text-sm text-zinc-400">Lofi Girl • 24/7 Persistent Stream</p>
             </div>
           </div>
