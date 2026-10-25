@@ -45,3 +45,8 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+
+# Agents & AI Tooling
+.agents/
+.cursor/
+AGENTS.md

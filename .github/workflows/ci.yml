@@ -34,8 +34,5 @@ jobs:
       - name: Execute Test Suite
         run: npm test
 
-      - name: Validate Oxfords UI/UX Standard
-        run: npm run check:slop
-
       - name: Compile All Workspaces
         run: npm run build

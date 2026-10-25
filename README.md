@@ -163,7 +163,4 @@ The containerized stack boots Lavalink v4, PostgreSQL, the Discord bot client, a
    ```bash
    # Execute unit and integration tests
    npm test
-
-   # Validate Oxfords UI/UX compliance
-   npm run check:slop
    ```
