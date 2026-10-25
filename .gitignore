@@ -20,6 +20,8 @@ coverage/
 
 # Lavalink Runtime & Logs
 Lavalink.jar
+plugins/
+lavalink/plugins/
 application.log
 lavalink-application.log
 logs/
