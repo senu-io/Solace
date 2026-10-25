@@ -54,14 +54,15 @@ plugins:
     allowDirectVideoIds: true
     allowDirectPlaylistIds: true
     clients:
+      - ANDROID_VR
       - MUSIC
-      - ANDROID
+      - WEBEMBEDDED
       - WEB
-      - TVHTML5EMBEDDED
   lavasrc:
     providers:
       - "ytsearch:\"%ISRC%\""
       - "ytsearch:%QUERY%"
+      - "scsearch:%QUERY%"
     sources:
       spotify: true
       applemusic: false
