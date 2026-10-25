@@ -6,11 +6,13 @@ server:
 
 lavalink:
   plugins:
-    # YouTube plugin for Lavalink v4
-    - dependency: "dev.lavalink.youtube:youtube-plugin:1.11.4"
+    # YouTube plugin for Lavalink v4 (Updated to fix player script cipher)
+    - dependency: "dev.lavalink.youtube:youtube-plugin:1.18.2"
+      repository: "https://maven.lavalink.dev/releases"
       snapshot: false
     # LavaSrc plugin for Spotify, Apple Music, Deezer
-    - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.4.1"
+    - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.8.3"
+      repository: "https://maven.lavalink.dev/releases"
       snapshot: false
   server:
     password: "youshallnotpass"
@@ -53,8 +55,9 @@ plugins:
     allowDirectPlaylistIds: true
     clients:
       - MUSIC
-      - WEB
       - ANDROID
+      - WEB
+      - TVHTML5EMBEDDED
   lavasrc:
     providers:
       - "ytsearch:\"%ISRC%\""
