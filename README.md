@@ -4,15 +4,29 @@
   <p>Multi-source Discord music system with dedicated management dashboards.</p>
 
   <p>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-blue.svg" alt="License: AGPL-3.0" /></a>
+    <a href="#disclaimer"><img src="https://img.shields.io/badge/status-work_in_progress-orange.svg" alt="Status: Work in Progress" /></a>
+  </p>
+
+  <p>
+    <a href="#disclaimer">Disclaimer</a> &bull;
     <a href="#overview">Overview</a> &bull;
     <a href="#features">Features</a> &bull;
     <a href="#architecture">Architecture</a> &bull;
     <a href="#permissions">Permissions</a> &bull;
     <a href="#project-structure">Project Structure</a> &bull;
     <a href="#deployment">Deployment</a> &bull;
-    <a href="#development">Development</a>
+    <a href="#development">Development</a> &bull;
+    <a href="#license">License</a>
   </p>
 </div>
+
+---
+
+## Disclaimer
+
+> [!NOTE]
+> Solace is currently a work in progress under active development. Core audio pipelines, dashboards, commands, and deployment configurations are subject to continuous refinement and breaking changes.
 
 ---
 
@@ -164,3 +178,11 @@ The containerized stack boots Lavalink v4, PostgreSQL, the Discord bot client, a
    # Execute unit and integration tests
    npm test
    ```
+
+---
+
+## License
+
+[![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
+
+This project is licensed under the terms of the GNU Affero General Public License v3.0. Refer to the [LICENSE](LICENSE) file for complete terms.
